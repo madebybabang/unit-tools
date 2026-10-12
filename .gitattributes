@@ -1,0 +1,26 @@
+# Normalize semua text file ke LF di repo
+* text=auto eol=lf
+
+# Binary — jangan disentuh
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.pdf binary
+*.zip binary
+
+# SVG itu text
+*.svg text
+
+# Script shell wajib LF
+*.sh text eol=lf
+
+# Batch Windows wajib CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
