@@ -1,46 +1,60 @@
-# UNIT Tools — Information Architecture
+# UNIT Studio — Information Architecture
 
 > Struktur navigasi & hierarki halaman.
 > Prinsip: pengunjung datang untuk menyelesaikan tugas, bukan mengikuti
 > tur museum navigasi.
+> Revisi v1.1: menyesuaikan dengan struktur naungan UNIT Studio.
 
 ## Peta hierarki
-UNIT Tools
+UNIT Studio (naungan)
+│
+└── unitstudio.dev
 │
 ├── Global navigation
 │ ├── Language switcher (ID / EN)
 │ └── Search
 │
-├── Home
-│ ├── Featured tools
-│ └── All tools preview
+├── / → Landing naungan (tentang UNIT Studio)
 │
-├── Browse & search
-│ └── /tools/ — direktori lengkap
-│ ├── Kategori: Image tools
-│ └── Kategori: Utility / Developer tools
+├── /tools/ → UNIT Tools (payung)
+│ ├── /image/ → kategori
+│ ├── /text/ → kategori
+│ ├── /dev/ → kategori
+│ ├── /utility/ → kategori
+│ ├── /commerce/ → slot, isi nanti
+│ └── /convert/ → slot, isi nanti
 │
-├── Individual tool page
-│ └── Input → Processing → Result → Download / Copy
-│
-└── Supporting pages
-├── About
-├── Privacy
-├── Contact
-└── Not found (404)
+├── /about/ → Tentang UNIT Studio
+├── /privacy/ → Kebijakan privasi
+├── /contact/ → Kontak
+└── /404 → Halaman tidak ditemukan
 
 
 ## Navigasi utama
 
 | Item | Tujuan | Catatan |
 |---|---|---|
-| Home | `/id/` atau `/en/` | Titik masuk utama |
-| All Tools | `/id/tools/` | Direktori lengkap |
-| Categories | Ancor / filter di halaman tools | Bukan halaman terpisah di MVP |
-| About | `/id/about/` | Info produk & UNIT Studio |
+| Home | `/id/` atau `/en/` | Landing naungan UNIT Studio |
+| Tools | `/id/tools/` | Homepage UNIT Tools |
+| Categories | Filter di halaman tools | Bukan halaman terpisah di MVP |
+| About | `/id/about/` | Info naungan + UNIT Studio |
 
 Pencarian alat dan pengalih bahasa ditempatkan di **header**.
 Di perangkat mobile, navigasi diringkas agar area kerja tidak sempit.
+
+## Hierarki kategori
+
+Kategori ditampilkan sebagai filter di `/tools/`. Setiap tool punya
+`category` di tool registry.
+
+| Kategori | Slug | Status MVP |
+|---|---|---|
+| Image | `image` | Aktif (2 tool) |
+| Text | `text` | Aktif (1 tool) |
+| Dev | `dev` | Aktif (2 tool) |
+| Utility | `utility` | Aktif (1 tool) |
+| Commerce | `commerce` | Slot kosong |
+| Convert | `convert` | Slot kosong |
 
 ## Alur halaman tool
 
@@ -91,4 +105,6 @@ setiap kali membuka tool berbeda.
 - Paket berbayar.
 - Dashboard administrasi.
 - Halaman kategori terpisah per kategori.
+- Halaman landing per sub-produk (selain UNIT Tools).
 - Blog / changelog.
+- Subdomain per produk.
