@@ -4,12 +4,12 @@ import { renderHome } from "./pages/home.js";
 import { renderAllTools } from "./pages/all-tools.js";
 import { renderNotFound } from "./pages/not-found.js";
 
-// Routes
+// Daftarkan halaman statis
 registerRoute("/", (params, ctx) => renderHome(ctx));
 registerRoute("/tools", (params, ctx) => renderAllTools(ctx));
 
-// 404
+// Daftarkan 404
 setNotFound((ctx) => renderNotFound(ctx));
 
-// Init
+// Mulai router
 initRouter();

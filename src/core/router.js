@@ -1,5 +1,6 @@
 import { setLanguage, getSupportedLanguages, getLanguage } from "./i18n.js";
 import { renderLayout } from "../layouts/main-layout.js";
+import { getToolById } from "./tool-registry.js";
 
 const supportedLangs = getSupportedLanguages();
 const fallbackLang = "en";
@@ -60,6 +61,7 @@ export function navigate(path) {
 }
 
 export function render() {
+  // Jalankan cleanup dari halaman sebelumnya (kalau ada)
   if (typeof currentCleanup === "function") {
     currentCleanup();
     currentCleanup = null;
@@ -82,23 +84,34 @@ export function render() {
   setLanguage(lang);
 
   const ctx = { lang, path };
-  let pageHtml = "";
+  let result = null;
 
   // Cari halaman yang cocok
   for (const route of routes) {
-    const result = matchRoute(route.pattern, segments);
-    if (result) {
-      pageHtml = route.handler(result.params, ctx);
+    const match = matchRoute(route.pattern, segments);
+    if (match) {
+      result = route.handler(match.params, ctx);
       break;
     }
   }
 
-  // Kalau gak ada halaman yang cocok, render 404
-  if (!pageHtml && notFoundHandler) {
-    pageHtml = notFoundHandler(ctx);
+  // Kalau gak ada yang cocok, panggil 404
+  if (!result && notFoundHandler) {
+    result = notFoundHandler(ctx);
   }
 
-  // Bungkus dengan layout dan render ke DOM
+  // Ekstrak HTML dan fungsi init (kalau ada)
+  let pageHtml = "";
+  let initFn = null;
+
+  if (typeof result === "string") {
+    pageHtml = result;
+  } else if (result && typeof result === "object") {
+    pageHtml = result.html;
+    initFn = result.init;
+  }
+
+  // Render ke DOM
   const app = document.querySelector("#app");
   app.innerHTML = renderLayout(pageHtml, ctx);
   window.scrollTo(0, 0);
@@ -111,6 +124,11 @@ export function render() {
       const newPath = window.location.pathname.replace(/^\/(id|en)\//, `/${newLang}/`);
       navigate(newPath);
     });
+  }
+
+  // Jalankan fungsi init halaman (setelah HTML masuk ke DOM)
+  if (typeof initFn === "function") {
+    currentCleanup = initFn();
   }
 }
 
@@ -127,5 +145,21 @@ export function initRouter() {
   });
 
   window.addEventListener("popstate", render);
+
+  // Daftarkan route dinamis untuk tool
+  registerRoute("/tools/:id", (params, ctx) => {
+    const tool = getToolById(params.id);
+    
+    if (!tool || tool.status !== "active" || !tool.render) {
+      return notFoundHandler(ctx);
+    }
+
+    // Kembalikan objek { html, init }
+    return {
+      html: tool.render(ctx),
+      init: tool.init,
+    };
+  });
+
   render();
 }

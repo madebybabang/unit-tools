@@ -1,8 +1,4 @@
-/**
- * Tool Registry
- * Sumber data tunggal untuk semua tool di UNIT Tools.
- * Digunakan oleh: homepage, direktori, tool card, router, SEO.
- */
+import { renderWordCounter, initWordCounter } from "../tools/word-counter/index.js";
 
 const tools = [
   {
@@ -70,6 +66,8 @@ const tools = [
     nameKey: "toolNames.wordCounter",
     descriptionKey: "toolDescriptions.wordCounter",
     tags: ["word", "character", "counter", "text", "reading time"],
+    render: renderWordCounter,
+    init: initWordCounter,
   },
 ];
 
@@ -83,49 +81,27 @@ const categories = [
   { id: "convert", labelKey: "tools.filterConvert" },
 ];
 
-/**
- * Semua tool, urut berdasarkan priority.
- */
 export function getAllTools() {
   return [...tools].sort((a, b) => a.priority - b.priority);
 }
 
-/**
- * Tool yang ditandai featured.
- */
 export function getFeaturedTools() {
   return getAllTools().filter((tool) => tool.featured);
 }
 
-/**
- * Cari tool berdasarkan id.
- * @param {string} id
- */
 export function getToolById(id) {
   return tools.find((tool) => tool.id === id) || null;
 }
 
-/**
- * Tool berdasarkan kategori.
- * @param {string} category - "image", "dev", dll. "all" untuk semua.
- */
 export function getToolsByCategory(category) {
   if (!category || category === "all") return getAllTools();
   return getAllTools().filter((tool) => tool.category === category);
 }
 
-/**
- * Semua kategori yang tersedia.
- */
 export function getCategories() {
   return [...categories];
 }
 
-/**
- * Cari tool berdasarkan query.
- * @param {string} query
- * @param {(key: string) => string} t - fungsi i18n
- */
 export function searchTools(query, t) {
   if (!query || query.trim() === "") return getAllTools();
 
@@ -145,9 +121,6 @@ export function searchTools(query, t) {
   });
 }
 
-/**
- * Jumlah tool aktif.
- */
 export function getToolCount() {
   return tools.filter((t) => t.status === "active").length;
 }
