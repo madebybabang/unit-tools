@@ -1,10 +1,5 @@
-/**
- * Router sederhana berbasis URL path.
- * Struktur URL: /<lang>/<segments...>
- * Contoh: /id/, /en/tools/, /id/tools/json-formatter/
- */
-
-import { setLanguage, getSupportedLanguages } from "./i18n.js";
+import { setLanguage, getSupportedLanguages, getLanguage } from "./i18n.js";
+import { renderLayout } from "../layouts/main-layout.js";
 
 const supportedLangs = getSupportedLanguages();
 const fallbackLang = "en";
@@ -86,20 +81,36 @@ export function render() {
 
   setLanguage(lang);
 
+  const ctx = { lang, path };
+  let pageHtml = "";
+
+  // Cari halaman yang cocok
   for (const route of routes) {
     const result = matchRoute(route.pattern, segments);
     if (result) {
-      const ctx = { lang, path };
-      const cleanup = route.handler(result.params, ctx);
-      if (typeof cleanup === "function") {
-        currentCleanup = cleanup;
-      }
-      return;
+      pageHtml = route.handler(result.params, ctx);
+      break;
     }
   }
 
-  if (notFoundHandler) {
-    notFoundHandler({ lang, path });
+  // Kalau gak ada halaman yang cocok, render 404
+  if (!pageHtml && notFoundHandler) {
+    pageHtml = notFoundHandler(ctx);
+  }
+
+  // Bungkus dengan layout dan render ke DOM
+  const app = document.querySelector("#app");
+  app.innerHTML = renderLayout(pageHtml, ctx);
+  window.scrollTo(0, 0);
+
+  // Pasang event listener untuk tombol ganti bahasa
+  const langBtn = document.getElementById("lang-switch");
+  if (langBtn) {
+    langBtn.addEventListener("click", () => {
+      const newLang = getLanguage() === "id" ? "en" : "id";
+      const newPath = window.location.pathname.replace(/^\/(id|en)\//, `/${newLang}/`);
+      navigate(newPath);
+    });
   }
 }
 

@@ -7,7 +7,7 @@ export function renderAllTools(ctx) {
   const all = getAllTools();
 
   return `
-    <section class="container" style="padding-block: var(--space-16);">
+    <div class="container" style="padding-block: var(--space-16);">
       <h1>${t("tools.pageTitle")}</h1>
       <p class="text-muted" style="margin-top: var(--space-4); font-size: var(--text-lg);">
         ${t("tools.pageSubtitle")}
@@ -16,7 +16,7 @@ export function renderAllTools(ctx) {
       <div style="margin-top: var(--space-8); display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
         ${all.map((tool) => renderToolCard(tool, lang)).join("")}
       </div>
-    </section>
+    </div>
   `;
 }
 
