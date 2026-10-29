@@ -3,6 +3,8 @@ import { renderJsonFormatter, initJsonFormatter } from "../tools/json-formatter/
 import { renderBase64, initBase64 } from "../tools/base64/index.js"; 
 import { renderQrGenerator, initQrGenerator } from "../tools/qr-generator/index.js";
 import { renderImageConverter, initImageConverter } from "../tools/image-converter/index.js";
+import { renderImageCompressor, initImageCompressor } from "../tools/image-compressor/index.js";
+
 
 
 const tools = [
@@ -16,6 +18,8 @@ const tools = [
     nameKey: "toolNames.imageCompressor",
     descriptionKey: "toolDescriptions.imageCompressor",
     tags: ["image", "compress", "jpg", "png", "webp", "optimize"],
+    render: renderImageCompressor,
+    init: initImageCompressor,
   },
   {
     id: "image-converter",
