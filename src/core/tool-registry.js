@@ -2,6 +2,7 @@ import { renderWordCounter, initWordCounter } from "../tools/word-counter/index.
 import { renderJsonFormatter, initJsonFormatter } from "../tools/json-formatter/index.js";
 import { renderBase64, initBase64 } from "../tools/base64/index.js"; 
 import { renderQrGenerator, initQrGenerator } from "../tools/qr-generator/index.js";
+import { renderImageConverter, initImageConverter } from "../tools/image-converter/index.js";
 
 
 const tools = [
@@ -26,6 +27,8 @@ const tools = [
     nameKey: "toolNames.imageConverter",
     descriptionKey: "toolDescriptions.imageConverter",
     tags: ["image", "convert", "jpg", "png", "webp", "format"],
+    render: renderImageConverter,
+    init: initImageConverter,
   },
   {
     id: "qr-generator",
