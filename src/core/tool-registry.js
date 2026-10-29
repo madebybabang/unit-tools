@@ -1,6 +1,7 @@
 import { renderWordCounter, initWordCounter } from "../tools/word-counter/index.js";
 import { renderJsonFormatter, initJsonFormatter } from "../tools/json-formatter/index.js";
 import { renderBase64, initBase64 } from "../tools/base64/index.js"; 
+import { renderQrGenerator, initQrGenerator } from "../tools/qr-generator/index.js";
 
 
 const tools = [
@@ -36,6 +37,8 @@ const tools = [
     nameKey: "toolNames.qrGenerator",
     descriptionKey: "toolDescriptions.qrGenerator",
     tags: ["qr", "barcode", "url", "generator"],
+    render: renderQrGenerator,
+    init: initQrGenerator,     
   },
   {
     id: "json-formatter",
