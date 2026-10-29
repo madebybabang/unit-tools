@@ -1,4 +1,6 @@
 import { renderWordCounter, initWordCounter } from "../tools/word-counter/index.js";
+import { renderJsonFormatter, initJsonFormatter } from "../tools/json-formatter/index.js";
+
 
 const tools = [
   {
@@ -44,6 +46,8 @@ const tools = [
     nameKey: "toolNames.jsonFormatter",
     descriptionKey: "toolDescriptions.jsonFormatter",
     tags: ["json", "format", "validate", "beautify", "minify", "developer"],
+    render: renderJsonFormatter, // <-- tambahin
+    init: initJsonFormatter,
   },
   {
     id: "base64",
