@@ -3,43 +3,45 @@ import { buildUrl } from "../../core/router.js";
 
 export function renderWordCounter(ctx) {
   return `
-    <div class="container" style="padding-block: var(--space-8); max-width: 800px;">
+    <div class="tool-container">
       
-      <!-- Breadcrumb -->
-      <p style="margin-bottom: var(--space-4);">
-        <a data-link href="${buildUrl(ctx.lang, 'tools')}" class="text-muted" style="font-size: var(--text-sm);">
+      <div class="tool-header">
+        <a data-link href="${buildUrl(ctx.lang, 'tools')}" class="text-muted" style="font-size: var(--text-sm); display: inline-block; margin-bottom: var(--space-4);">
           ← ${t("tools.backToList")}
         </a>
-      </p>
-
-      <!-- Header -->
-      <h1>${t("toolNames.wordCounter")}</h1>
-      <p class="text-muted" style="margin-top: var(--space-2);">${t("toolDescriptions.wordCounter")}</p>
-
-      <!-- Tool Area -->
-      <div style="margin-top: var(--space-8);">
-        <textarea 
-          id="wc-input" 
-          placeholder="${t("tools.howToUse")}..." 
-          style="width: 100%; height: 200px; padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-family: var(--font-sans); font-size: var(--text-base); resize: vertical;"
-        ></textarea>
-        
-        <div style="display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-3);">
-          <button id="wc-clear" style="padding: var(--space-2) var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);">
-            ${t("common.clear")}
-          </button>
-          <button id="wc-copy" style="padding: var(--space-2) var(--space-4); background: var(--color-brand-500); color: white; border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: var(--font-medium);">
-            ${t("common.copy")}
-          </button>
-        </div>
+        <h1>${t("toolNames.wordCounter")}</h1>
+        <p class="text-muted" style="margin-top: var(--space-2);">${t("toolDescriptions.wordCounter")}</p>
       </div>
 
-      <!-- Statistics -->
-      <div style="margin-top: var(--space-8); display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-4);">
-        ${renderStatCard("words", t("common.success") ? "Kata" : "Words")}
-        ${renderStatCard("chars", "Karakter / Characters")}
-        ${renderStatCard("sentences", "Kalimat / Sentences")}
-        ${renderStatCard("reading", "Estimasi Baca / Reading Time")}
+      <div style="display: grid; grid-template-columns: 1fr; gap: var(--space-6); md:grid-template-columns: 2fr 1fr;">
+        
+        <!-- Input Area -->
+        <div>
+          <textarea 
+            id="wc-input" 
+            class="dev-textarea"
+            style="height: 400px;"
+            placeholder="${t("tools.howToUse")}..." 
+          ></textarea>
+          
+          <div style="display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-3);">
+            <button id="wc-clear" class="btn btn-outline">
+              ${t("common.clear")}
+            </button>
+            <button id="wc-copy" class="btn btn-primary">
+              ${t("common.copy")}
+            </button>
+          </div>
+        </div>
+
+        <!-- Statistics Panel -->
+        <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+          ${renderStatCard("words", ctx.lang === "id" ? "Kata" : "Words")}
+          ${renderStatCard("chars", ctx.lang === "id" ? "Karakter" : "Characters")}
+          ${renderStatCard("sentences", ctx.lang === "id" ? "Kalimat" : "Sentences")}
+          ${renderStatCard("reading", ctx.lang === "id" ? "Estimasi Baca" : "Reading Time")}
+        </div>
+
       </div>
 
     </div>
@@ -48,9 +50,9 @@ export function renderWordCounter(ctx) {
 
 function renderStatCard(id, label) {
   return `
-    <div style="padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface);">
+    <div class="card" style="padding: var(--space-4);">
       <p class="text-muted" style="font-size: var(--text-sm); font-weight: var(--font-medium);">${label}</p>
-      <p id="stat-${id}" style="font-size: var(--text-2xl); font-weight: var(--font-bold); margin-top: var(--space-2); color: var(--color-brand-600);">0</p>
+      <p id="stat-${id}" style="font-size: var(--text-3xl); font-weight: var(--font-bold); margin-top: var(--space-1); color: var(--color-brand-600);">0</p>
     </div>
   `;
 }
@@ -68,23 +70,18 @@ export function initWordCounter() {
   function updateStats() {
     const text = input.value;
     
-    // Words
     const words = text.trim() ? text.trim().split(/\s+/).length : 0;
     statWords.textContent = words;
     
-    // Characters (with spaces)
     statChars.textContent = text.length;
     
-    // Sentences (split by . ! ?)
     const sentences = text.trim() ? text.split(/[.!?]+/).filter(Boolean).length : 0;
     statSentences.textContent = sentences;
     
-    // Reading time (assuming 200 words per minute)
     const minutes = Math.ceil(words / 200);
     statReading.textContent = `${minutes} min`;
   }
 
-  // Event Listeners
   input.addEventListener("input", updateStats);
   
   btnClear.addEventListener("click", () => {
@@ -105,13 +102,9 @@ export function initWordCounter() {
     }
   });
 
-  // Initial calculation
   updateStats();
 
-  // Return cleanup function (wajib buat router)
   return () => {
     input.removeEventListener("input", updateStats);
-    btnClear.removeEventListener("click", () => {});
-    btnCopy.removeEventListener("click", () => {});
   };
 }

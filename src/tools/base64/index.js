@@ -3,25 +3,23 @@ import { buildUrl } from "../../core/router.js";
 
 export function renderBase64(ctx) {
   return `
-    <div class="container" style="padding-block: var(--space-8); max-width: 1000px;">
+    <div class="tool-container">
       
-      <p style="margin-bottom: var(--space-4);">
-        <a data-link href="${buildUrl(ctx.lang, 'tools')}" class="text-muted" style="font-size: var(--text-sm);">
+      <div class="tool-header">
+        <a data-link href="${buildUrl(ctx.lang, 'tools')}" class="text-muted" style="font-size: var(--text-sm); display: inline-block; margin-bottom: var(--space-4);">
           ← ${t("tools.backToList")}
         </a>
-      </p>
+        <h1>${t("toolNames.base64")}</h1>
+        <p class="text-muted" style="margin-top: var(--space-2);">${t("toolDescriptions.base64")}</p>
+      </div>
 
-      <h1>${t("toolNames.base64")}</h1>
-      <p class="text-muted" style="margin-top: var(--space-2);">${t("toolDescriptions.base64")}</p>
-
-      <div style="margin-top: var(--space-6); display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
-        
+      <div class="split-pane">
         <!-- Input -->
         <div>
           <textarea 
             id="b64-input" 
+            class="dev-textarea"
             placeholder="Type text or Base64 here..." 
-            style="width: 100%; height: 300px; padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: var(--text-sm); resize: vertical;"
           ></textarea>
         </div>
 
@@ -29,25 +27,29 @@ export function renderBase64(ctx) {
         <div>
           <textarea 
             id="b64-output" 
+            class="dev-textarea"
             readonly
             placeholder="Result will appear here..." 
-            style="width: 100%; height: 300px; padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: var(--text-sm); background: var(--color-bg-subtle); resize: vertical;"
+            style="background: var(--color-bg-subtle);"
           ></textarea>
         </div>
       </div>
 
-      <!-- Actions -->
-      <div style="display: flex; gap: var(--space-2); margin-top: var(--space-4); flex-wrap: wrap;">
-        <button id="b64-encode" style="padding: var(--space-2) var(--space-4); background: var(--color-brand-500); color: white; border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: var(--font-medium);">
+      <!-- Action Bar -->
+      <div style="display: flex; gap: var(--space-2); margin-top: var(--space-4); flex-wrap: wrap; align-items: center;">
+        <button id="b64-encode" class="btn btn-primary">
           Encode (Text → Base64)
         </button>
-        <button id="b64-decode" style="padding: var(--space-2) var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);">
+        <button id="b64-decode" class="btn btn-outline">
           Decode (Base64 → Text)
         </button>
-        <button id="b64-clear" style="padding: var(--space-2) var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);">
+        <button id="b64-clear" class="btn btn-outline">
           ${t("common.clear")}
         </button>
-        <button id="b64-copy" style="padding: var(--space-2) var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm); margin-left: auto;">
+        
+        <div style="flex-grow: 1;"></div>
+
+        <button id="b64-copy" class="btn btn-outline">
           ${t("common.copy")}
         </button>
       </div>
@@ -80,14 +82,12 @@ export function initBase64() {
   }
 
   function encodeBase64(str) {
-    // Trik Unicode-safe untuk Base64
     const bytes = new TextEncoder().encode(str);
     const binString = Array.from(bytes, (byte) => String.fromCodePoint(byte)).join("");
     return btoa(binString);
   }
 
   function decodeBase64(str) {
-    // Trik Unicode-safe untuk Base64
     const binString = atob(str);
     const bytes = Uint8Array.from(binString, (m) => m.codePointAt(0));
     return new TextDecoder().decode(bytes);
