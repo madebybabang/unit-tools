@@ -1,7 +1,22 @@
+import { t } from "./i18n.js";
 import { setLanguage, getSupportedLanguages, getLanguage } from "./i18n.js";
 import { renderLayout } from "../layouts/main-layout.js";
 import { getToolById } from "./tool-registry.js";
 
+const defaultTitle = "UNIT Studio";
+const defaultDesc = "UNIT Studio — naungan untuk produk digital yang ringan, cepat, dan langsung bisa digunakan.";
+
+function updateMeta(title, description) {
+  document.title = title ? `${title} | UNIT Studio` : defaultTitle;
+  
+  let metaDesc = document.querySelector('meta[name="description"]');
+  if (!metaDesc) {
+    metaDesc = document.createElement("meta");
+    metaDesc.setAttribute("name", "description");
+    document.head.appendChild(metaDesc);
+  }
+  metaDesc.setAttribute("content", description || defaultDesc);
+}
 const supportedLangs = getSupportedLanguages();
 const fallbackLang = "en";
 
@@ -84,13 +99,20 @@ export function render() {
   setLanguage(lang);
 
   const ctx = { lang, path };
-  let result = null;
+    let result = null;
+  let pageTitle = null;
+  let pageDesc = null;
 
   // Cari halaman yang cocok
   for (const route of routes) {
     const match = matchRoute(route.pattern, segments);
     if (match) {
       result = route.handler(match.params, ctx);
+      
+      if (result && typeof result === "object") {
+        pageTitle = result.title;
+        pageDesc = result.description;
+      }
       break;
     }
   }
@@ -114,6 +136,7 @@ export function render() {
   // Render ke DOM
   const app = document.querySelector("#app");
   app.innerHTML = renderLayout(pageHtml, ctx);
+    updateMeta(pageTitle, pageDesc);
   window.scrollTo(0, 0);
 
   // Pasang event listener untuk tombol ganti bahasa
@@ -147,17 +170,18 @@ export function initRouter() {
   window.addEventListener("popstate", render);
 
   // Daftarkan route dinamis untuk tool
-  registerRoute("/tools/:id", (params, ctx) => {
+    registerRoute("/tools/:id", (params, ctx) => {
     const tool = getToolById(params.id);
     
     if (!tool || tool.status !== "active" || !tool.render) {
       return notFoundHandler(ctx);
     }
 
-    // Kembalikan objek { html, init }
     return {
       html: tool.render(ctx),
       init: tool.init,
+      title: t(tool.nameKey), 
+      description: t(tool.descriptionKey) 
     };
   });
 
