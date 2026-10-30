@@ -3,51 +3,58 @@ import { buildUrl } from "../../core/router.js";
 
 export function renderJsonFormatter(ctx) {
   return `
-    <div class="container" style="padding-block: var(--space-8); max-width: 1000px;">
+    <div class="tool-container">
       
-      <p style="margin-bottom: var(--space-4);">
-        <a data-link href="${buildUrl(ctx.lang, 'tools')}" class="text-muted" style="font-size: var(--text-sm);">
+      <div class="tool-header">
+        <a data-link href="${buildUrl(ctx.lang, 'tools')}" class="text-muted" style="font-size: var(--text-sm); display: inline-block; margin-bottom: var(--space-4);">
           ← ${t("tools.backToList")}
         </a>
-      </p>
+        <h1>${t("toolNames.jsonFormatter")}</h1>
+        <p class="text-muted" style="margin-top: var(--space-2);">${t("toolDescriptions.jsonFormatter")}</p>
+      </div>
 
-      <h1>${t("toolNames.jsonFormatter")}</h1>
-      <p class="text-muted" style="margin-top: var(--space-2);">${t("toolDescriptions.jsonFormatter")}</p>
-
-      <div style="margin-top: var(--space-6); display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+      <div class="split-pane">
+        <!-- Input -->
         <div>
           <textarea 
             id="json-input" 
+            class="dev-textarea"
             placeholder="Paste JSON here..." 
-            style="width: 100%; height: 400px; padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: var(--text-sm); resize: vertical;"
           ></textarea>
         </div>
 
+        <!-- Output -->
         <div>
           <textarea 
             id="json-output" 
+            class="dev-textarea"
             readonly
             placeholder="Result will appear here..." 
-            style="width: 100%; height: 400px; padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: var(--text-sm); background: var(--color-bg-subtle); resize: vertical;"
+            style="background: var(--color-bg-subtle);"
           ></textarea>
         </div>
       </div>
 
-      <div style="display: flex; gap: var(--space-2); margin-top: var(--space-4); flex-wrap: wrap;">
-        <button id="json-format" style="padding: var(--space-2) var(--space-4); background: var(--color-brand-500); color: white; border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: var(--font-medium);">
+      <!-- Action Bar -->
+      <div style="display: flex; gap: var(--space-2); margin-top: var(--space-4); flex-wrap: wrap; align-items: center;">
+        <button id="json-format" class="btn btn-primary">
           Format / Beautify
         </button>
-        <button id="json-minify" style="padding: var(--space-2) var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);">
+        <button id="json-minify" class="btn btn-outline">
           Minify
         </button>
-        <button id="json-clear" style="padding: var(--space-2) var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm);">
+        <button id="json-clear" class="btn btn-outline">
           ${t("common.clear")}
         </button>
-        <button id="json-copy" style="padding: var(--space-2) var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--text-sm); margin-left: auto;">
+        
+        <div style="flex-grow: 1;"></div> <!-- Spacer -->
+
+        <button id="json-copy" class="btn btn-outline">
           ${t("common.copy")}
         </button>
       </div>
 
+      <!-- Error Message -->
       <div id="json-error" style="display: none; margin-top: var(--space-4); padding: var(--space-3); background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-md); color: var(--color-error); font-size: var(--text-sm); font-family: var(--font-mono);"></div>
 
     </div>
