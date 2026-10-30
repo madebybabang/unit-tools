@@ -1,11 +1,15 @@
 @import "./tokens.css";
 @import "./reset.css";
 
+/* =========================================
+   BASE STYLES
+   ========================================= */
 body {
   font-family: var(--font-sans);
   font-size: var(--text-base);
   color: var(--color-text);
   background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
 }
 
 .container {
@@ -21,10 +25,204 @@ body {
   }
 }
 
-h1 { font-size: var(--text-4xl); font-weight: var(--font-bold); line-height: var(--leading-tight); }
-h2 { font-size: var(--text-3xl); font-weight: var(--font-bold); line-height: var(--leading-tight); }
-h3 { font-size: var(--text-2xl); font-weight: var(--font-semibold); }
-h4 { font-size: var(--text-xl); font-weight: var(--font-semibold); }
+/* Typography */
+h1 { font-size: 2.5rem; font-weight: var(--font-bold); line-height: 1.1; letter-spacing: -0.03em; }
+h2 { font-size: 1.5rem; font-weight: var(--font-semibold); letter-spacing: -0.02em; }
+@media (min-width: 768px) {
+  h1 { font-size: 3.5rem; }
+}
 
 .text-muted { color: var(--color-text-muted); }
-.text-subtle { color: var(--color-text-subtle); }
+.text-subtle { color: #8b949e; }
+
+/* Sticky Glass Header */
+#main-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* =========================================
+   COMPONENTS
+   ========================================= */
+
+/* --- Badges --- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  background: var(--color-bg-subtle);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+.badge-brand {
+  background: var(--color-brand-50);
+  color: var(--color-brand-700);
+  border-color: var(--color-brand-200);
+}
+
+/* --- Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 8px 16px;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.btn-primary {
+  background: var(--color-brand-500);
+  color: white;
+}
+.btn-primary:hover {
+  background: var(--color-brand-600);
+}
+.btn-outline {
+  background: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+.btn-outline:hover {
+  background: var(--color-bg-subtle);
+  border-color: var(--color-border-strong);
+}
+
+/* --- Big Search Bar (Gaya Stitch) --- */
+.search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.search-wrapper svg {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  width: 20px;
+  height: 20px;
+}
+.search-input {
+  width: 100%;
+  padding: 16px 16px 16px 48px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  background: var(--color-surface);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.search-input:focus {
+  outline: none;
+  border-color: var(--color-brand-400);
+  box-shadow: 0 0 0 4px var(--color-brand-100);
+}
+
+/* --- Grid & Cards --- */
+.tools-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+.card:hover {
+  border-color: var(--color-brand-300);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+  transform: translateY(-2px);
+}
+
+/* Icon di Card */
+.card-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: var(--color-brand-50);
+  color: var(--color-brand-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  border: 1px solid var(--color-brand-100);
+}
+.card-icon-box svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Label Kategori di Kanan Atas */
+.card-tag {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #f8fafc;
+  color: #64748b;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.card-desc {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+.card-footer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card-meta {
+  font-size: 12px;
+  color: #8b949e;
+  font-family: var(--font-mono);
+}
+.card-action {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-brand-600);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

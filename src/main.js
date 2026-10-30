@@ -1,6 +1,6 @@
 import "./styles/global.css";
 import { registerRoute, setNotFound, initRouter } from "./core/router.js";
-import { renderHome } from "./pages/home.js";
+import { renderHome, initHome } from "./pages/home.js"; // <-- WAJIB ADA initHome
 import { renderAllTools, initAllTools } from "./pages/all-tools.js";
 import { renderNotFound } from "./pages/not-found.js";
 import { renderAbout } from "./pages/about.js";
@@ -10,6 +10,7 @@ import { renderContact } from "./pages/contact.js";
 registerRoute("/", (params, ctx) => {
   return {
     html: renderHome(ctx),
+    init: initHome, //
     title: "Home",
     description: "Alat praktis untuk kerja sehari-hari. Gratis, tanpa akun."
   };
@@ -24,29 +25,7 @@ registerRoute("/tools", (params, ctx) => {
   };
 });
 
-registerRoute("/about", (params, ctx) => {
-  return {
-    html: renderAbout(ctx),
-    title: "About",
-    description: "Tentang UNIT Studio dan prinsip produk kami."
-  };
-});
-
-registerRoute("/privacy", (params, ctx) => {
-  return {
-    html: renderPrivacy(ctx),
-    title: "Privacy Policy",
-    description: "Kebijakan privasi UNIT Studio."
-  };
-});
-
-registerRoute("/contact", (params, ctx) => {
-  return {
-    html: renderContact(ctx),
-    title: "Contact",
-    description: "Hubungi UNIT Studio."
-  };
-});
+// ... (route about, privacy, contact biarin aja) ...
 
 setNotFound((ctx) => renderNotFound(ctx));
 
